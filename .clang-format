@@ -1,0 +1,52 @@
+# Google C++ Style Guide formatting
+# Based on: https://google.github.io/styleguide/cppguide.html
+
+BasedOnStyle: Google
+
+# Language and standard
+Language: Cpp
+Standard: c++17
+
+# Indentation
+IndentWidth: 2
+UseTab: Never
+ContinuationIndentWidth: 4
+
+# Line length
+ColumnLimit: 80
+
+# Braces
+BreakBeforeBraces: Attach
+
+# Spacing
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceAfterCStyleCast: false
+
+# Alignment
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignTrailingComments: true
+
+# Include sorting
+SortIncludes: true
+IncludeBlocks: Regroup
+
+# Pointer and reference alignment
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# Function parameters
+AllowAllParametersOfDeclarationOnNextLine: true
+BinPackParameters: true
+
+# Namespace
+NamespaceIndentation: None
+
+# Comments
+ReflowComments: true
+
+# Line endings
+DeriveLineEnding: false
+UseCRLF: false
