@@ -65,8 +65,5 @@ custom-editor/
 └── README.md              # This file
 ```
 
-## Development
-
-- Add new source files to `src/CMakeLists.txt`
-- Add header files to the `include/` directory
-- Use `include_directories(include)` in CMakeLists.txt to include headers
+## References
+https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html

@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include <iostream>
+#include <map>
 #include <ostream>
 
 #include "../include/file_operations.h"
@@ -18,7 +19,6 @@ void Terminal::runInRawMode() {
   raw.c_lflag &= ~(ICANON | ECHO);
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
-// end of raw mode
 
 void Terminal::endRawMode() {
   termios raw;
@@ -26,11 +26,11 @@ void Terminal::endRawMode() {
   raw.c_lflag |= (ICANON | ECHO);
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
-// end of raw mode
 void Terminal::getInput(std::string filename) {
-  std::cout << " Writing to file: " << filename << std::endl;
   FileOperations fileOperations;
   int lineNumber = fileOperations.readFromFile(filename);
+
+  std::map<int, std::string> buffer;
 
   if (lineNumber == 0) {
     fileOperations.createFile(filename);
@@ -44,50 +44,33 @@ void Terminal::getInput(std::string filename) {
     if (c == 'q') {
       std::cout << c << std::flush;
       if (input.length() > 0) {
-        fileOperations.writeToFile(filename, input);
+        buffer[lineNumber] = input;
+        fileOperations.writeToFile(filename, buffer[lineNumber]);
         input.clear();
       }
       break;
     } else if (c == 'd') {
-      // remove it from console as well
       std::cout << "\b \b" << std::flush;
       input.erase(input.begin() + input.length() - 1);
     } else if (c == '\n') {
       std::cout << std::endl;
       std::cout << lineNumber << ": " << std::flush;
       lineNumber++;
-      fileOperations.writeToFile(filename, input);
+      buffer[lineNumber] = input;
+      fileOperations.writeToFile(filename, buffer[lineNumber]);
       input.clear();
-    }
-    // up arrow
-    else if (c == 'j') {
-      std::cout << "up arrow" << std::flush;
-      // move the to the previous line'
-      
+    } else if (c == 'j') {
+      const char* back = "\033[1A";
+      lineNumber--;
+      input = buffer[lineNumber];
+      write(STDOUT_FILENO, back, strlen(back));
 
-    }
-    // down arrow
-    else if (c == 'k') {
+    } else if (c == 'k') {
       std::cout << "down arrow" << std::flush;
-    }
-    /*
-      delete letter
-      remove the letter and like move the cursor to the left
-      case 1:
-        *hello:
-          then go to the prev line
-        he*llo:
-          then js move the cursor the the left and delete 'e'
-
-      case 2:
-        delete randmoly from anywhere in the file
-        go to the line
-          {case 1}
-      */
-    else {
+    } else {
       std::cout << c << std::flush;
       input += c;
-      ;
+      buffer[lineNumber] = input;
     }
   }
 }

@@ -21,10 +21,8 @@ void Editor::run(std::string filename) {
 
   std::string input;
 
-  // check if file exists
   std::ifstream infile(path);
   if (!infile.good()) {
-    // create file
     fileOperations.createFile(path);
   } else {
     lineNumber = fileOperations.readFromFile(path);
